@@ -1,7 +1,7 @@
 const fs = require('node:fs/promises');
 const path = require('path');
 const SimpleDb = require('../lib/simple-db.js');
-
+const crypto = require('crypto');
 const { CI, HOME } = process.env;
 const BASE_DIR = CI ? HOME : __dirname;
 const TEST_DIR = path.join(BASE_DIR, 'test-dir');
@@ -16,27 +16,25 @@ describe('simple database', () => {
   });
 
   it('gets file by id', async () => {
-    // //define a source path
-    // const srcPath = path.join(TEST_DIR, 'test.txt');
-    // const db = new SimpleDb(TEST_DIR);
-    // //make a new test file in the TEST_DIR
-    // await fs.writeFile(srcPath, 'read me');
-    // //test our getById function using our test file sourcepath
-    // db.getFileById(srcPath);
-    // //expect result
-    // const file = await fs.readFile(srcPath);
-    // expect(file).toEqual('read me');
+    const test = {
+      name: 'Test'
+    };
+    const id = crypto.randomBytes(8).toString('hex');
+    await fs.writeFile(`${TEST_DIR}/${id}.json`, JSON.stringify(test));
+    const db = new SimpleDb(TEST_DIR);
+    const result = await db.getFileById(id);
+    expect(result).toEqual(test);
   });
 
   it('saves a file', async () => {
-    
+    //make test object
     const test = {
       name: 'Test'
     };
     const db = new SimpleDb(TEST_DIR);
     await db.save(test);
-    const result = await db.get(test.id);
+    const result = await db.getFileById(test.id);
     expect(result).toEqual(test);
   });
-
+  
 });
