@@ -16,12 +16,20 @@ describe('simple database', () => {
   });
 
   it('gets all files', async () => {
-    const test = {
-      name: 'Test'
+    //create two test objects
+    const testObject1 = {
+      name: 'Test1'
     };
+    const testObject2 = {
+      name: 'Test2'
+    };
+    //save to the directory
     const db = new SimpleDb(TEST_DIR);
+    await db.save(testObject1, testObject2);
+    //call getAll
     const result = await db.getAllFiles();
-    expect(result).toEqual(test);
+    //verify .toEqual
+    expect(result).toEqual([testObject1, testObject2]);
   });
 
   it('gets file by id', async () => {
