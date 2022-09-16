@@ -17,19 +17,40 @@ describe('simple database', () => {
 
   it('gets all files', async () => {
     //create two test objects
-    const testObject1 = {
-      name: 'Test1'
-    };
-    const testObject2 = {
-      name: 'Test2'
-    };
-    //save to the directory
+    const testObjects = [
+      {
+        name: 'Test1'
+      },
+      {
+        name: 'Test2'
+      },
+      {
+        name: 'Test3'
+      },
+    ];
+    //create new db instance
     const db = new SimpleDb(TEST_DIR);
-    await db.save(testObject1, testObject2);
-    //call getAll
+    //map through all objects and save
+    testObjects.forEach(async testObject => {
+      await db.save(testObject);
+    });
+    //call getAllFiles as result
     const result = await db.getAllFiles();
     //verify .toEqual
-    expect(result).toEqual([testObject1, testObject2]);
+    expect(result).toEqual([
+      {
+        name: expect.any(String),
+        id: expect.any(String)
+      },
+      {
+        name: expect.any(String),
+        id: expect.any(String)
+      },
+      {
+        name: expect.any(String),
+        id: expect.any(String)
+      }
+    ]);
   });
 
   it('gets file by id', async () => {
