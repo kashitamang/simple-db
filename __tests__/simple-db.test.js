@@ -15,6 +15,15 @@ describe('simple database', () => {
     await fs.mkdir(TEST_DIR, { recursive: true });
   });
 
+  it('gets all files', async () => {
+    const test = {
+      name: 'Test'
+    };
+    const db = new SimpleDb(TEST_DIR);
+    const result = await db.getAllFiles();
+    expect(result).toEqual(test);
+  });
+
   it('gets file by id', async () => {
     const test = {
       name: 'Test'
